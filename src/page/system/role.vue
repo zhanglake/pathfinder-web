@@ -43,7 +43,7 @@
             <el-input v-model="role.roleName" style="width: 500px;"></el-input>
           </el-form-item>
           <el-form-item label="描述">
-            <el-input v-model="role.description" :disabled="true" style="width: 500px;"></el-input>
+            <el-input v-model="role.description" style="width: 500px;"></el-input>
           </el-form-item>
           <el-form-item label="是否可用">
             <el-switch v-model="role.available" active-text="可用" inactive-text="禁用"></el-switch>
