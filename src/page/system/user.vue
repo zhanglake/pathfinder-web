@@ -21,10 +21,10 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click.native.prevent="editRow(scope)" type="text" size="small">
-                编辑
+                <i class="el-icon-edit"></i> 编辑
               </el-button>
               <el-button @click.native.prevent="deleteRow(scope)" type="text" size="small">
-                移除
+                <i class="el-icon-delete"></i> 移除
               </el-button>
           </template>
           </el-table-column>
@@ -35,11 +35,11 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="编辑用户" v-loading="editTabLoading" :disabled="editTabDisabled">
-        <el-form ref="user" :model="user" label-width="120px" label-position="left" size="small" style="width: 80%;margin: 20px;">
+        <el-form ref="userForm" :rules="userValidateRules" :model="user" label-width="120px" label-position="left" size="small" style="width: 80%;margin: 20px;">
           <el-form-item label="用户编号" style="display: none;">
             <el-input v-model="user.userId" size="small" style="width: 500px;"></el-input>
           </el-form-item>
-          <el-form-item label="用户名">
+          <el-form-item label="用户名" prop="userName">
             <el-input v-model="user.userName" style="width: 500px;"></el-input>
           </el-form-item>
           <el-form-item label="密码">
@@ -96,7 +96,13 @@ export default {
       organizations: [],
       roles: [],
       orgLoading: false,
-      roleLoading: false
+      roleLoading: false,
+      userValidateRules: {
+        userName: [
+          { required: true, message: '请输入角色名称', trigger: 'blur' },
+          { min: 0, max: 20, message: '长度在20个字符以内', trigger: 'blur' }
+        ]
+      }
     }
   },
   created: function() {
@@ -247,29 +253,36 @@ export default {
     // 确认保存修改用户
     onSubmit: function () {
       var me = this;
-      var myUser = {
-        userId: me.user.userId,
-        userName: me.user.userName,
-        locked: me.user.locked,
-        organizationId: me.user.organization,
-        roleIds: me.user.roles
-      };
-      me.editTabLoading = true;
-      $.ajax({
-        url: "/pf/user/update",
-        type: "post",
-        contentType: "application/json",
-        data: JSON.stringify(myUser),
-        success: function (data) {
-          me.editTabLoading = false;
-          me.$message({
-            showClose: true,
-            message: data.message,
-            type: data.status.toLowerCase()
-          })
-        },
-        error: function () {
-          me.editTabLoading = false;
+      // 表单验证
+      me.$refs.userForm.validate((valid) => {
+        if (valid) {
+          var myUser = {
+            userId: me.user.userId,
+            userName: me.user.userName,
+            locked: me.user.locked,
+            organizationId: me.user.organization,
+            roleIds: me.user.roles
+          };
+          me.editTabLoading = true;
+          $.ajax({
+            url: "/pf/user/update",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify(myUser),
+            success: function (data) {
+              me.editTabLoading = false;
+              me.$message({
+                showClose: true,
+                message: data.message,
+                type: data.status.toLowerCase()
+              })
+            },
+            error: function () {
+              me.editTabLoading = false;
+            }
+          });
+        } else {
+          return false;
         }
       });
     }

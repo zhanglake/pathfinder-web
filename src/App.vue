@@ -4,12 +4,10 @@
     <header class="header" :class="{ 'header-fixed' : headerFixed }">
       <el-row>
           <el-col :span="24">
-            <el-menu default-active="/system" class="el-menu-demo" mode="horizontal" @select="">
-              <el-menu-item index="/system">系统管理</el-menu-item>
-              <el-menu-item index="2">在线商城</el-menu-item>
-              <el-menu-item index="3">客户管理</el-menu-item>
-              <el-menu-item index="4">系统设置</el-menu-item>
-              <el-menu-item index="5">活动发布</el-menu-item>
+            <el-menu default-active="/home" class="el-menu-demo" mode="horizontal" :router="true">
+              <el-menu-item v-for="item in menus" :index="item.path">
+                {{ item.menuName }}
+              </el-menu-item>
             </el-menu>
           </el-col>
       </el-row>
@@ -23,19 +21,35 @@
 </template>
 
 <script>
-// import Vue from 'vue'
-// import Element from 'element-ui'
-// import 'element-ui/lib/theme-default/index.css'
-// import $ from 'jquery'
-
-// Vue.use(Element)
+import $ from 'jquery'
 
 export default {
-  name: 'app',
   data: function () {
     return {
       active: true,
-      headerFixed: true
+      headerFixed: true,
+      menus: []
+    }
+  },
+  created: function () {
+    this.getMenus(1);
+  },
+  methods: {
+    getMenus: function (roleId) {
+      var me = this;
+      $.get("/pf/menu/top/" + roleId, function (data) {
+        var myMenus = [];
+        for (var i = 0; i < data.data.length; i ++) {
+          var myMenu = {
+            menuId: data.data[i].menuId,
+            menuName: data.data[i].menuName,
+            path: data.data[i].path,
+            sort: data.data[i].sort
+          }
+          myMenus.push(myMenu);
+        }
+        me.menus = myMenus;
+      });
     }
   }
 }
@@ -69,5 +83,6 @@ main {
   min-height: 800px;
   border: solid 40px #E9ECF1;
   background-color: #FCFCFC;
+  border-width: 20px 40px;
 }
 </style>

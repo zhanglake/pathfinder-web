@@ -1,9 +1,10 @@
 <template>
   <main>
     <div class="main-left">
-      <el-menu default-active="/system/aa" class="el-menu-vertical-demo" :router="true">
-        <el-menu-item index="/system/user">用户管理</el-menu-item>
-        <el-menu-item index="/system/role">角色管理</el-menu-item>
+      <el-menu default-active="/system/user" class="el-menu-vertical-demo" :router="true">
+        <el-menu-item v-for="item in menus" :key="item.menuId" :index="item.path">
+          {{ item.menuName }}
+        </el-menu-item>
       </el-menu>
     </div>
     <div class="main-right">
@@ -13,8 +14,35 @@
 </template>
 
 <script>
+import $ from 'jquery'
+
 export default {
-  name: 'system'
+  data: function () {
+    return {
+      menus: []
+    }
+  },
+  created: function () {
+    this.getMenus(1, 2);
+  },
+  methods: {
+    getMenus: function (roleId, menuId) {
+      var me = this;
+      $.get("/pf/menu/secondary/" + roleId + "/" + menuId, function (data) {
+        var myMenus = [];
+        for (var i = 0; i < data.data.length; i ++) {
+          var myMenu = {
+            menuId: data.data[i].menuId,
+            menuName: data.data[i].menuName,
+            path: data.data[i].path,
+            sort: data.data[i].sort
+          }
+          myMenus.push(myMenu);
+        }
+        me.menus = myMenus;
+      });
+    }
+  }
 }
 </script>
 <style>
