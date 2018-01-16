@@ -32,7 +32,7 @@
             </el-pagination>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="新增客户" :disabled="addTabDisabled">
+      <el-tab-pane label="新增产品" :disabled="addTabDisabled">
         <el-form ref="addProductForm" v-loading="addTabLoading" :model="newProduct" 
           :rules="addProductRules" label-width="120px" label-position="left" size="small" style="width: 80%;margin: 20px;">
           <el-form-item label="产品名称" prop="productName">
@@ -73,7 +73,7 @@
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
       </el-tab-pane>
-      <el-tab-pane label="编辑客户" :disabled="updateTabDisabled">
+      <el-tab-pane label="编辑产品" :disabled="updateTabDisabled">
         <el-form ref="updateProductForm" v-loading="updateTabLoading" :model="product" 
           :rules="updateProductRules" label-width="120px" label-position="left" size="small" style="width: 80%;margin: 20px;">
           <el-form-item label="产品名称" prop="productName">

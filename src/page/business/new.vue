@@ -1,7 +1,5 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+  <div id="new"></div>
 </template>
 
 <script>
@@ -9,7 +7,10 @@ import $ from 'jquery'
 
 export default {
   data: function () {
-    return {}
+    return {
+      active: true,
+      headerFixed: true
+    }
   }
 }
 </script>
