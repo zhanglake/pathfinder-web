@@ -2,35 +2,37 @@
   <div id="all">
     <el-row>
       <el-col style="width: 80px;padding:0px;position: fixed;">
-        <div v-for="tp in typeProducts" class="left-menu">
+        <div v-for="tp in typeProducts" class="left-menu" :key="tp.type.typeId">
           <a href="javascript:void(0)" @click="goAnchor('#anchor-' + tp.type.typeId)">{{ tp.type.typeName }}</a>
         </div>
       </el-col>
       <el-col :span="18" style="position: absolute;left: 90px;">
         <el-row>
-          <el-col :span="24" v-for="tp in typeProducts">
+          <el-col :span="24" v-for="tp in typeProducts" :key="tp.type.typeId">
             <div :id="'anchor-' + tp.type.typeId" :name="tp.type.typeId" class="product-type">{{ tp.type.typeName }}</div>
             <el-col :span="24" v-for="p in tp.products" :key="p.productId">
               <el-card :body-style="{ padding: '0px' }" style="height: 120px;">
-                <img :src="'/pf/' + p.pictures[0].path" class="image">
-                <div class="card-div">
-                  <span style="display: block;height: 30px;margin: 10px 0 0 0;line-height: 30px;">{{ p.productName }}</span>
-                  <div class="bottom clearfix">
-                    <label class="description">{{ p.description }}</label>
+                <a @click="showOne(p.productId)">
+                  <img :src="'/pf/' + p.pictures[0].path" class="image">
+                  <div class="card-div">
+                    <span style="display: block;height: 30px;margin: 10px 0 0 0;line-height: 30px;">{{ p.productName }}</span>
+                    <div class="bottom clearfix">
+                      <label class="description">{{ p.description }}</label>
+                    </div>
+                    <div style="height: 20px;">
+                      <el-button type="text" class="button" @click="addToCart(p)" style="float: right;margin-right: 10px;">
+                        <i class="el-icon-circle-plus-outline"></i>
+                      </el-button>
+                    </div>
                   </div>
-                  <div style="height: 20px;">
-                    <el-button type="text" class="button" @click="addToCart(p)" style="float: right;margin-right: 10px;">
-                      <i class="el-icon-circle-plus-outline"></i>
-                    </el-button>
-                  </div>
-                </div>
+                </a>
               </el-card>
             </el-col>
           </el-col>
         </el-row>
+        <div style="height: 60px;display: block;"></div>
       </el-col>
     </el-row>
-    <div style="height: 50px;display: block;"></div>
 
     <el-popover ref="popover4" placement="top-start" title="购物车"
       width="300" trigger="click" :visible-arrow="true" @show="popShow" @hide="popHide">
@@ -98,6 +100,17 @@ export default {
         success: function (data) {
           me.typeProducts = data.data;
           loading.close();
+        }
+      });
+    },
+    // 获取单个产品详细信息
+    showOne: function (productId) {
+      $.ajax({
+        url: "/pf/product/one/" + productId,
+        type: "get",
+        contentType: "application/json",
+        success: function (data) {
+          console.log(data.data);
         }
       });
     },
@@ -322,9 +335,13 @@ export default {
   .description {
     font-size: 13px;
     color: #999;
+    height: 60px;
+    display: inline-block;
+    overflow: hidden;
+    width: 120px;
   }
   .bottom {
-    line-height: 30px;
+    line-height: 20px;
     height: 30px;
     margin-top: 5px;
   }

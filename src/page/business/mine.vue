@@ -50,7 +50,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="绑定用户" :visible.sync="customerDialogVisible" :modal="true" width="80%">
+    <el-dialog title="绑定用户" :show-close="false" :close-on-click-modal="false" :visible="customerDialogVisible" :modal="true" width="80%">
       <el-form ref="customerForm" :model="customer" label-position="left" size="small"
         :rules="customerRules" label-width="80px">
         <el-form-item label="联系方式" prop="phone">
@@ -73,6 +73,7 @@
 <script>
 import $ from 'jquery'
 import '../../global/global.js'
+import './customer.js'
 export default {
   data: function () {
     return {
@@ -80,7 +81,7 @@ export default {
       customerDialogVisible: false,
       nameDisabled: false,
       addressDisabled: false,
-      customer: this.$route.params.customer ? this.$route.params.customer : {
+      customer: this.$route.params.customer ? this.$route.params.customer : global.CURRENT_CUSTOMER ? global.CURRENT_CUSTOMER : {
         id: '',
         name: '',
         phone: '',
@@ -104,8 +105,9 @@ export default {
   created: function () {
     if (!this.customer.id) {
       this.customerDialogVisible = true;
+    } else {
+      this.findOrderList();
     }
-    this.findOrderList();
   },
   methods: {
     getCustomer: function () {
@@ -122,6 +124,7 @@ export default {
               me.customer.address = data.data.address;
               me.nameDisabled = true;
               me.addressDisabled = true;
+              me.findOrderList();
             } else {
               me.customer.id = '';
               me.customer.name = '';
@@ -129,6 +132,7 @@ export default {
               me.nameDisabled = false;
               me.addressDisabled = false;
             }
+            global.CURRENT_CUSTOMER = me.customer;
           }
         });
       } else {
@@ -142,9 +146,9 @@ export default {
     // 绑定用户
     bindCustomer: function () {
       var me = this;
-      if (!me.customer.id) {
-        me.$refs.customerForm.validate((valid) => {
-          if (valid) {
+      me.$refs.customerForm.validate((valid) => {
+        if (valid) {
+          if (!me.customer.id) {
             // 没有客户信息就要先保存客户信息
             var customerLoading = this.$loading({
               lock: true,
@@ -163,24 +167,34 @@ export default {
               contentType: "application/json",
               data: JSON.stringify(c),
               success: function (data) {
+                me.customer.id = data.data.customerId;
+                me.customer.name = data.data.customerName;
+                me.customer.phone = data.data.phone;
+                me.customer.address = data.data.address;
+                global.CURRENT_CUSTOMER = me.customer;
+                me.findOrderList();
+                me.$message({
+                  showClose: true,
+                  message: data.message,
+                  type: data.status.toLowerCase()
+                });
                 customerLoading.close();
-                this.customerDialogVisible = true;
+                me.customerDialogVisible = false;
               },
               error: function () {
                 customerLoading.close();
               }
             });
+          } else {
+            me.customerDialogVisible = false;
           }
-        });
-      } else {
-        this.customerDialogVisible = false;
-      }
+        }
+      });
     },
     // 获取列表
     findOrderList: function () {
-      const loading = this.$loading();
+      var loading = this.$loading();
       var me = this;
-      me.customer.id = 1;
       if (me.customer.id) {
         $.ajax({
           url: "/pf/order/c/list/" + me.customer.id,

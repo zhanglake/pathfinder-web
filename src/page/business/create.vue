@@ -58,7 +58,7 @@ export default {
     return {
       nameDisabled: false,
       addressDisabled: false,
-      customer: {
+      customer: global.CURRENT_CUSTOMER ? global.CURRENT_CUSTOMER : {
         id: '',
         name: '',
         phone: '',
@@ -114,6 +114,7 @@ export default {
               me.nameDisabled = false;
               me.addressDisabled = false;
             }
+            global.CURRENT_CUSTOMER = me.customer;
           }
         });
       } else {
@@ -195,6 +196,7 @@ export default {
         data: JSON.stringify(o),
         success: function (data) {
           orderLoading.close();
+          global.CURRENT_CUSTOMER = me.customer;
           me.$router.push({
             name: 'mine',
             params: {

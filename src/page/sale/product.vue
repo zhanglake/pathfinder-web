@@ -48,7 +48,7 @@
           </el-form-item>
           <el-form-item label="折扣" prop="discount">
             <el-select v-model="newProduct.discount" placeholder="请选择折扣" @change="changeDiscount" style="width: 500px;">
-              <el-option v-for="item in discount" :label="item.name" :value="item.value"></el-option>
+              <el-option v-for="item in discount" :label="item.name" :value="item.value" :key="item.value"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="售价" prop="salePrice">
@@ -64,7 +64,7 @@
             <el-input v-model="newProduct.description" type="textarea" placeholder="请输入描述" style="width: 500px;"></el-input>
           </el-form-item>
           <el-form-item label="图片" prop="pictures">
-            <el-upload action="/pf/file/upload" list-type="picture-card" :on-preview="handlePicturePreview" 
+            <el-upload ref="picUpload1" action="/pf/file/upload" list-type="picture-card" :on-preview="handlePicturePreview" 
               :on-remove="handlePictureRemove" :on-success="handlePcitureSuccess">
               <i class="el-icon-plus"></i>
             </el-upload>
@@ -94,7 +94,7 @@
           </el-form-item>
           <el-form-item label="折扣" prop="discount">
             <el-select v-model="product.discount" placeholder="请选择折扣" @change="changeDiscount" style="width: 500px;">
-              <el-option v-for="item in discount" :label="item.name" :value="item.value"></el-option>
+              <el-option v-for="item in discount" :label="item.name" :value="item.value" :key="item.value"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="售价" prop="salePrice">
@@ -110,7 +110,7 @@
             <el-input v-model="product.description" type="textarea" placeholder="请输入描述" style="width: 500px;"></el-input>
           </el-form-item>
           <el-form-item label="图片" prop="pictures">
-            <el-upload action="/pf/file/upload" list-type="picture-card" :on-preview="handlePicturePreview" 
+            <el-upload ref="picUpload2" action="/pf/file/upload" list-type="picture-card" :on-preview="handlePicturePreview" 
               :on-remove="handlePictureRemove" :on-success="handlePcitureSuccess" :file-list="product.pictures">
               <i class="el-icon-plus"></i>
             </el-upload>
@@ -301,6 +301,7 @@ export default {
               me.editableTabsValue = '0';
               me.findList(1, null);
               me.resetAdd();
+              me.$refs.picUpload1.clearFiles();
               me.addTabLoading = false;
               this.addTabDisabled = true;
             },
@@ -376,6 +377,7 @@ export default {
                 type: data.status.toLowerCase()
               });
               me.editableTabsValue = '0';
+              me.$refs.picUpload2.clearFiles();
               me.findList(me.tablePage, me.param);
               this.updateTabDisabled = true;
             },
