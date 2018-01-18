@@ -13,17 +13,19 @@
         <div class="card-head">我的订单</div>
         <div style="line-height: 40px;">
           <el-row>
-            <el-col :span="9">订单编号</el-col>
-            <el-col :span="11">创建时间</el-col>
-            <el-col :span="4">状态</el-col>
+            <el-col :span="9" style="font-size: 12px;font-weight: 900;">订单编号</el-col>
+            <el-col :span="8" style="font-size: 12px;font-weight: 900;">创建时间</el-col>
+            <el-col :span="3" style="font-size: 12px;font-weight: 900;">金额</el-col>
+            <el-col :span="4" style="font-size: 12px;font-weight: 900;">状态</el-col>
           </el-row>
         </div>
         <div v-for="o in orders" :key="o.orderId" style="border: 1px solid #ccc;border-width: 1px 0 0 0;">
           <a @click="showOneOrder(o.orderId)">
             <el-row>
-              <el-col :span="9" style="font-size: 14px;line-height: 50px;">{{ o.orderCode }}</el-col>
-              <el-col :span="11" style="font-size: 14px;line-height: 50px;">{{ o.createdDate }}</el-col>
-              <el-col :span="4" style="font-size: 14px;line-height: 50px;">
+              <el-col :span="9" style="font-size: 10px;line-height: 50px;">{{ o.orderCode }}</el-col>
+              <el-col :span="8" style="font-size: 10px;line-height: 50px;">{{ o.createdDate }}</el-col>
+              <el-col :span="3" style="font-size: 10px;line-height: 50px;">￥{{ o.totalPrice }}</el-col>
+              <el-col :span="4" style="font-size: 10px;line-height: 50px;">
                 <span :class="'status status-' + o.statusInt">{{ o.status }}</span>
               </el-col>
             </el-row>
@@ -70,6 +72,7 @@
 
 <script>
 import $ from 'jquery'
+import '../../global/global.js'
 export default {
   data: function () {
     return {
@@ -105,25 +108,6 @@ export default {
     this.findOrderList();
   },
   methods: {
-    // 日期格式转换
-    getMyDate: function (str) {
-      var oDate = new Date(str),  
-      oYear = oDate.getFullYear(),  
-      oMonth = oDate.getMonth()+1,  
-      oDay = oDate.getDate(),  
-      oHour = oDate.getHours(),  
-      oMin = oDate.getMinutes(),  
-      oSen = oDate.getSeconds(),  
-      oTime = oYear +'-'+ this.getzf(oMonth) +'-'+ this.getzf(oDay) +' '+ this.getzf(oHour) +':'+ this.getzf(oMin) +':'+ this.getzf(oSen);
-      return oTime;  
-    },
-    // 日期补0操作
-    getzf: function (num) {
-      if(parseInt(num) < 10){  
-        num = '0'+num;  
-      }  
-      return num;  
-    },
     getCustomer: function () {
       var me = this;
       if (me.customer.phone) {
@@ -206,7 +190,7 @@ export default {
             me.orders = data.data;
             // 改时间格式和状态
             for (var i = 0; i < me.orders.length; i ++) {
-              me.orders[i].createdDate = me.getMyDate(me.orders[i].createdDate);
+              me.orders[i].createdDate = global.FORMAT_DATE(me.orders[i].createdDate);
               switch (me.orders[i].statusInt) {
                 case 0: me.orders[i].status = '已创建';break;
                 case 1: me.orders[i].status = '待付款';break;
@@ -255,11 +239,11 @@ export default {
 }
 .status {
   display: inline-block;
-  width: 50px;
-  height: 25px;
-  font-size: 12px;
-  border-radius: 12px;
-  line-height: 25px;
+  width: 40px;
+  height: 20px;
+  font-size: 10px;
+  border-radius: 10px;
+  line-height: 20px;
   text-align: center;
   color: #fff;
 }

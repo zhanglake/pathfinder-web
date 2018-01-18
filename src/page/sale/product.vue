@@ -38,6 +38,11 @@
           <el-form-item label="产品名称" prop="productName">
             <el-input v-model="newProduct.productName" placeholder="请输入产品名称" style="width: 500px;"></el-input>
           </el-form-item>
+          <el-form-item label="产品分类" prop="typeId">
+            <el-select v-model="newProduct.typeId" placeholder="请选择产品分类" style="width: 500px;">
+              <el-option v-for="item in productType" :label="item.name" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="原价" prop="price">
             <el-input v-model="newProduct.price" placeholder="请输入原价" @blur="changeDiscount" style="width: 500px;"></el-input>
           </el-form-item>
@@ -78,6 +83,11 @@
           :rules="updateProductRules" label-width="120px" label-position="left" size="small" style="width: 80%;margin: 20px;">
           <el-form-item label="产品名称" prop="productName">
             <el-input v-model="product.productName" placeholder="请输入产品名称" style="width: 500px;"></el-input>
+          </el-form-item>
+          <el-form-item label="产品分类" prop="typeId">
+            <el-select v-model="product.typeId" placeholder="请选择产品分类" style="width: 500px;">
+              <el-option v-for="item in productType" :label="item.name" :value="item.value"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="原价" prop="price">
             <el-input v-model="product.price" placeholder="请输入原价" @blur="changeDiscount" style="width: 500px;"></el-input>
@@ -140,9 +150,14 @@ export default {
         {name: '7.5折', value: 0.75},{name: '7折', value: 0.7},{name: '6.5折', value: 0.65},{name: '6折', value: 0.6},{name: '5.5折', value: 0.55},
         {name: '5折', value: 0.5}
       ],
+      productType: [
+        {name: '烘焙面包', value: 1}, {name: '新鲜蛋糕', value: 2}, {name: '手工泡芙', value: 3},
+        {name: '精制点心', value: 4}, {name: '手工定制', value: 5}
+      ],
       newProduct: {
         productId: '',
         productName: '',
+        typeId: '',
         price: '',
         discount: '',
         salePrice: '',
@@ -154,6 +169,7 @@ export default {
       product: {
         productId: '',
         productName: '',
+        typeId: '',
         price: '',
         discount: '',
         salePrice: '',
@@ -175,6 +191,9 @@ export default {
         ],
         discount: [
           { required: true, message: '请选择折扣', trigger: 'blur' }
+        ],
+        typeId: [
+          { required: true, message: '请选择分类', trigger: 'blur' }
         ]
       },
       updateProductRules: {
@@ -189,6 +208,9 @@ export default {
         ],
         discount: [
           { required: true, message: '请选择折扣', trigger: 'blur' }
+        ],
+        typeId: [
+          { required: true, message: '请选择分类', trigger: 'blur' }
         ]
       }
     }
@@ -289,6 +311,9 @@ export default {
         }
       })
     },
+    aaa: function () {
+      console.log(this.product);
+    },
     // 编辑获取
     editRow: function (scope) {
       var id = scope.row.id;
@@ -310,6 +335,8 @@ export default {
           me.product.salePrice = data.data.salePrice;
           me.product.description = data.data.description;
           me.product.available = data.data.available;
+          me.product.typeId = data.data.typeId;
+          console.log(me.product);
           // 图片列表
           var pics = [];
           var picIds = [];
