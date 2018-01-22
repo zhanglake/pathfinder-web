@@ -250,34 +250,34 @@ export default {
     z-index: 999;
   }
   .cart, .cart:active, .cart:focus, .cart:hover {
-    width: 60px;
-    height: 60px;
-    position: absolute;
-    left: 20px;
-    bottom: 10px;
-    border-radius: 100%;
-    padding: 5px;
-    text-align: center;
-    color: #ffffff;
-    background-color: #FF8400;
-    border-color: #FF8400;
-    font-size: 25px;
-    line-height: 25px;
-    z-index: 998;
+    width: 60px !important;
+    height: 60px !important;
+    position: absolute !important;
+    left: 20px !important;
+    bottom: 10px !important;
+    border-radius: 100% !important;
+    padding: 5px !important;
+    text-align: center !important;
+    color: #ffffff !important;
+    background-color: #FF8400 !important;
+    border-color: #FF8400 !important;
+    font-size: 25px !important;
+    line-height: 25px !important;
+    z-index: 998 !important;
   }
   .submitBtn, .submitBtn:hover {
-    width: 100px;
-    height: 40px;
-    position: absolute;
-    right: 20px;
-    bottom: 5px;
-    color: #ffffff;
-    background-color: #FF8400;
-    border-color: #FF8400;
-    padding: 0px;
-    line-height: 40px;
-    text-align: center;
-    font-size: 18px;
+    width: 100px !important;
+    height: 40px !important;
+    position: absolute !important;
+    right: 20px !important;
+    bottom: 5px !important;
+    color: #ffffff !important;
+    background-color: #FF8400 !important;
+    border-color: #FF8400 !important;
+    padding: 0px !important;
+    line-height: 40px !important;
+    text-align: center !important;
+    font-size: 18px !important;
   }
   .cart-div {
     width: 100%;
