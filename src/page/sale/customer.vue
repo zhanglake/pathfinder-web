@@ -18,9 +18,9 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button @click.native.prevent="editRow(scope)" type="text" size="small">
+              <!-- <el-button @click.native.prevent="editRow(scope)" type="text" size="small">
                 <i class="el-icon-edit"></i> 编辑
-              </el-button>
+              </el-button> -->
               <el-button @click.native.prevent="deleteRow(scope)" type="text" size="small">
                 <i class="el-icon-delete"></i> 移除
               </el-button>

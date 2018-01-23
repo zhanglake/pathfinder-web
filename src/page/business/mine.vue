@@ -26,7 +26,7 @@
               <el-col :span="8" style="font-size: 10px;line-height: 50px;">{{ o.createdDate }}</el-col>
               <el-col :span="3" style="font-size: 10px;line-height: 50px;">￥{{ o.totalPrice }}</el-col>
               <el-col :span="4" style="font-size: 10px;line-height: 50px;">
-                <span :class="'status status-' + o.statusInt">{{ o.status }}</span>
+                <span :class="'status-c status-' + o.statusInt">{{ o.status }}</span>
               </el-col>
             </el-row>
           </a>
@@ -283,5 +283,15 @@ export default {
   border-width: 1px 0 0 0;
   margin: 10px 0;
   padding: 10px 0;
+}
+.status-c {
+    display: inline-block !important;
+    width: 40px !important;
+    height: 20px !important;
+    font-size: 10px !important;
+    border-radius: 10px !important;
+    line-height: 20px !important;
+    text-align: center !important;
+    color: #fff !important;
 }
 </style>

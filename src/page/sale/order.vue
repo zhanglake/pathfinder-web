@@ -64,7 +64,7 @@
       <el-row>
         <el-col :span="24" style="font-size: 16px;line-height: 20px;border: 1px solid #ff8400;border-width: 0 0 0 4px;padding-left: 30px;margin: 10px 0;">
           订单信息
-          <span :class="'status status-' + order.statusInt" style="margin-left: 10px;">{{ order.status }}</span>
+          <span :class="'status-dialog status-' + order.statusInt" style="margin-left: 10px;">{{ order.status }}</span>
         </el-col>
         <el-col :span="12">
           <div style="height: 30px;line-height: 30px;">
@@ -323,19 +323,30 @@ export default {
 </script>
 <style>
 .status {
-  display: inline-block;
-  width: 60px;
-  height: 30px;
-  font-size: 12px;
-  border-radius: 15px;
-  line-height: 30px;
-  text-align: center;
-  color: #fff;
-  margin-left: -10px;
+  display: inline-block !important;
+  width: 60px !important;
+  height: 30px !important;
+  font-size: 12px !important;
+  border-radius: 15px !important;
+  line-height: 30px !important;
+  text-align: center !important;
+  color: #fff !important;
+  margin-left: -10px !important;
 }
 .status-0 { background-color: #1ab394}
 .status-1 { background-color: #1ab394}
 .status-2 { background-color: #FB3301}
 .status-3 { background-color: #ff8400}
 .status-4 { background-color: #818385}
+
+.status-dialog {
+    display: inline-block !important;
+    width: 50px !important;
+    height: 20px !important;
+    font-size: 10px !important;
+    border-radius: 10px !important;
+    line-height: 20px !important;
+    text-align: center !important;
+    color: #fff !important;
+}
 </style>

@@ -14,8 +14,8 @@
             <el-col :span="14">{{ s.name }}</el-col>
             <el-col :span="2"><span class="money">x</span> {{ s.count }}</el-col>
             <el-col :span="8" style="text-align: right;">
-              <font style="font-size: 8px;"><s>￥{{ s.countPrice }}</s></font>
-              <font style="color: #FF3333;font-weight: 900;"><span class="money">￥</span>{{ s.countSalePrice }}</font>
+              <font v-show="s.countPrice>s.countSalePrice" style="font-size: 10px;"><s>￥{{ s.countPrice }}</s></font>
+              <font style="color: #FF3333;font-weight: 900;font-size: 16px;"><span class="money">￥</span>{{ s.countSalePrice }}</font>
             </el-col>
           </el-row>
         </div>
@@ -23,8 +23,7 @@
           <el-row>
             <el-col :span="18">小计</el-col>
             <el-col :span="6" style="text-align: right;">
-              <font style="font-size: 8px;"><s>￥{{ cart.totalPrice }}</s></font>
-              <font style="color: #FF3333;font-weight: 900;"><span class="money">￥</span>{{ cart.totalSalePrice }}</font>
+              <font style="color: #FF3333;font-weight: 900;font-size: 16px;"><span class="money">￥</span>{{ cart.totalSalePrice }}</font>
             </el-col>
           </el-row>
         </div>
@@ -263,7 +262,7 @@ export default {
   font-size: 20px;
 }
 .money {
-  font-size: 10px;
+  font-size: 12px;
 }
 .s {
   height: 30px;

@@ -20,7 +20,7 @@
                       <label class="description">{{ p.description }}</label>
                     </div>
                     <div style="height: 30px;margin-top: 5px;">
-                      <el-button type="text" class="button" @click="addToCart(p)" style="float: right;margin-right: 10px;">
+                      <el-button type="text" class="button" @click.stop="addToCart(p)" style="float: right;margin:0 20px 10px 0;font-size: 30px;color: #ff8400;">
                         <i class="el-icon-circle-plus-outline"></i>
                       </el-button>
                       <label style="color: #FF3333;font-weight: 900;"><font style="font-size: 12px;">￥</font>{{ p.salePrice }}</label>
@@ -46,7 +46,7 @@
           <div :class="index == cart.selected.length - 1 ? 'last-cart-div' : 'cart-div'">
             <span class="cart-name">{{ s.name }}</span>
             <span class="cart-price">
-              <font style="color: #FF3333;font-weight: 900;">￥{{ s.countSalePrice }}</font>
+              <font style="color: #FF3333;font-weight: 900;font-size: 16px;"><font style="font-size: 12px;">￥</font>{{ s.countSalePrice }}</font>
               <font v-show="s.countPrice>s.countSalePrice" style="font-size: 12px;"><s>￥{{ s.countPrice }}</s></font>
             </span>
             <div style="float: right;margin-fight: 20px;">
@@ -64,10 +64,37 @@
       <el-button v-popover:popover4 class="cart">
         <i class="el-icon-goods"></i>
       </el-button>
-      <div class="total-price">￥{{ cart.totalSalePrice}} ￥{{ cart.totalPrice }}</div>
+      <div class="total-price">￥{{ cart.totalSalePrice}} <font v-show="cart.totalPrice>cart.totalSalePrice" style="font-size: 12px;color: #ccc;"><s>￥{{ cart.totalPrice }}</s></font></div>
       <el-button class="submitBtn" @click="submit">去下单</el-button>
     </footer>
     <div id="cover"></div>
+
+    <el-dialog v-loading="detailDialogLoading" top="5vh" :visible.sync="detailDialogVisible" width="80%">
+      <div style="margin: -55px -20px -30px -20px;">
+        <el-carousel :interval="2000" indicator-position="none" :arrow="productDetail.pictures && productDetail.pictures.length > 1 ? 'always' : 'never'" height="300px">
+          <el-carousel-item v-for="pic in productDetail.pictures" :key="pic.fileId">
+            <img :src="'/pf/' + pic.path" style="width: 300px;height: 300px;" />
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+      <div style="margin: 30px 0 0 0;">
+        <div style="line-height: 40px;font-size: 18px;font-weight: 900;vertical-align: middle;">
+          {{ productDetail.productName }}
+        </div>
+        <div style="max-height: 60px;line-height: 20px;font-size: 14px;color: #aaa;">
+          <label v-show="productDetail.discount<1" class="discount-label">{{ productDetail.discountName }}</label>
+          {{ productDetail.description }}
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <div style="line-height: 40px;color: #FF3333;font-size: 18px;font-weight: 900;float: left;">
+          <font style="font-size: 14px;">￥</font>{{ productDetail.salePrice }}
+          <font style="font-size: 12px;color: #aaa;font-weight: 500;"><s>￥{{ productDetail.price }}</s></font>
+        </div>
+        <el-button type="primary" @click="addToCart(productDetail)">添加至购物车</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -76,14 +103,18 @@ import $ from 'jquery'
 export default {
   data: function () {
     return {
+      detailDialogVisible: false,
+      detailDialogLoading: false,
       currentDate: new Date(),
       typeProducts: [],
       selected: [],
       cart: this.$route.params.cart ? this.$route.params.cart :{
         totalPrice: 0,
+        totalSalePrice: 0,
         totalCount: 0,
         selected: this.selected
-      }
+      },
+      productDetail: {}
     }
   },
   created: function () {
@@ -112,11 +143,30 @@ export default {
     },
     // 获取单个产品详细信息
     showOne: function (productId) {
+      var me = this;
+      me.detailDialogVisible = true;
+      me.detailDialogLoading = true;
       $.ajax({
         url: "/pf/product/one/" + productId,
         type: "get",
         contentType: "application/json",
         success: function (data) {
+          console.log(data.data);
+          me.productDetail = data.data;
+          switch (me.productDetail.discount) {
+            case 0.95: me.productDetail.discountName = '9.5折';break;
+            case 0.9: me.productDetail.discountName = '9折';break;
+            case 0.85: me.productDetail.discountName = '8.5折';break;
+            case 0.8: me.productDetail.discountName = '8折';break;
+            case 0.75: me.productDetail.discountName = '7.5折';break;
+            case 0.7: me.productDetail.discountName = '7折';break;
+            case 0.65: me.productDetail.discountName = '6.5折';break;
+            case 0.6: me.productDetail.discountName = '6折';break;
+            case 0.55: me.productDetail.discountName = '5.5折';break;
+            case 0.5: me.productDetail.discountName = '5折';break;
+            case 1: me.productDetail.discountName = '10折';break;
+          }
+          me.detailDialogLoading = false;
         }
       });
     },
@@ -261,8 +311,8 @@ export default {
   }
   .badge {
     position: absolute;
-    top: -10px;
-    left: 50px;
+    top: -20px;
+    left: 60px;
     z-index: 999;
   }
   .cart, .cart:active, .cart:focus, .cart:hover {
@@ -321,14 +371,14 @@ export default {
     padding-left: 5px;
   }
   .cart-btn, .cart-btn:hover {
-    width: 20px;
-    height: 20px;
-    margin-top: 10px;
-    padding: 0px;
-    color: #fff;
-    background-color: #FF8400;
-    border-radius: 100%;
-    border-width: 0px;
+    width: 25px !important;
+    height: 25px !important;
+    margin-top: 8px !important;
+    padding: 0px !important;
+    color: #fff !important;
+    background-color: #FF8400 !important;
+    border-radius: 100% !important;
+    border-width: 0px !important;
   }
   .cart-count {
     width: 20px;
@@ -362,11 +412,11 @@ export default {
     margin-top: 5px;
   }
   .button {
-    padding: 0px;
-    float: right;
-    width: 30px;
-    height: 30px;
-    font-size: 24px;
+    padding: 0px !important;
+    float: right !important;
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 24px !important;
   }
   .image {
     height: 100px;
@@ -389,5 +439,17 @@ export default {
   }
   .clearfix:after {
       clear: both
+  }
+  .discount-label {
+    width: 40px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 10px;
+    display: inline-block;
+    margin: 0;
+    text-align: center;
+    background-color: #ff8300;
+    color: #fff;
+    border-radius: 5px;
   }
 </style>
