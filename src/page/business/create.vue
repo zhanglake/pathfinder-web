@@ -11,15 +11,21 @@
         </div>
         <div v-for="s in cart.selected" :key="s.id" class="text s">
           <el-row>
-            <el-col :span="16">{{ s.name }}</el-col>
+            <el-col :span="14">{{ s.name }}</el-col>
             <el-col :span="2"><span class="money">x</span> {{ s.count }}</el-col>
-            <el-col :span="6" style="text-align: right;"><span class="money">￥</span>{{ s.countPrice }}</el-col>
+            <el-col :span="8" style="text-align: right;">
+              <font style="font-size: 8px;"><s>￥{{ s.countPrice }}</s></font>
+              <font style="color: #FF3333;font-weight: 900;"><span class="money">￥</span>{{ s.countSalePrice }}</font>
+            </el-col>
           </el-row>
         </div>
         <div class="total">
           <el-row>
             <el-col :span="18">小计</el-col>
-            <el-col :span="6" style="text-align: right;"><span class="money">￥</span>{{ cart.totalPrice }}</el-col>
+            <el-col :span="6" style="text-align: right;">
+              <font style="font-size: 8px;"><s>￥{{ cart.totalPrice }}</s></font>
+              <font style="color: #FF3333;font-weight: 900;"><span class="money">￥</span>{{ cart.totalSalePrice }}</font>
+            </el-col>
           </el-row>
         </div>
       </el-card>
@@ -177,18 +183,23 @@ export default {
           productId: me.cart.selected[i].id,
           count: me.cart.selected[i].count,
           price: me.cart.selected[i].price,
-          countPrice: me.cart.selected[i].countPrice
+          salePrice: me.cart.selected[i].salePrice,
+          countPrice: me.cart.selected[i].countPrice,
+          countSalePrice: me.cart.selected[i].countSalePrice
         }
         ods.push(od);
       }
+      console.log(ods);
       var o = {
         phone: me.customer.phone,
         order: {
           customerId: me.customer.id,
           totalPrice: me.cart.totalPrice,
+          totalSalePrice: me.cart.totalSalePrice,
           orderDetails: ods
         }
       }
+      console.log(o);
       $.ajax({
         url: "/pf/order/add",
         type: "post",

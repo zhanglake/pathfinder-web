@@ -15,14 +15,18 @@
                 <a @click="showOne(p.productId)">
                   <img :src="'/pf/' + p.pictures[0].path" class="image">
                   <div class="card-div">
-                    <span style="display: block;height: 30px;margin: 10px 0 0 0;line-height: 30px;">{{ p.productName }}</span>
+                    <span style="display: block;height: 20px;margin: 5px 0 0 0;line-height: 20px;">{{ p.productName }}</span>
                     <div class="bottom clearfix">
                       <label class="description">{{ p.description }}</label>
                     </div>
-                    <div style="height: 20px;">
+                    <div style="height: 30px;margin-top: 5px;">
                       <el-button type="text" class="button" @click="addToCart(p)" style="float: right;margin-right: 10px;">
                         <i class="el-icon-circle-plus-outline"></i>
                       </el-button>
+                      <label style="color: #FF3333;font-weight: 900;"><font style="font-size: 12px;">￥</font>{{ p.salePrice }}</label>
+                      <label v-show="p.discount<1" style="color: #aaa;font-weight: 900;font-size: 10px;">
+                        <s>￥{{ p.price }}</s>
+                      </label>
                     </div>
                   </div>
                 </a>
@@ -41,7 +45,10 @@
         <el-col :span="24" v-for="(s, index) in cart.selected" :key="s.id">
           <div :class="index == cart.selected.length - 1 ? 'last-cart-div' : 'cart-div'">
             <span class="cart-name">{{ s.name }}</span>
-            <span class="cart-price">￥{{ s.countPrice }}</span>
+            <span class="cart-price">
+              <font style="color: #FF3333;font-weight: 900;">￥{{ s.countSalePrice }}</font>
+              <font v-show="s.countPrice>s.countSalePrice" style="font-size: 12px;"><s>￥{{ s.countPrice }}</s></font>
+            </span>
             <div style="float: right;margin-fight: 20px;">
               <el-button class="cart-btn" @click="minusOne(s)"><i class="el-icon-minus"></i></el-button>
               <span class="cart-count">{{ s.count }}</span>
@@ -57,7 +64,7 @@
       <el-button v-popover:popover4 class="cart">
         <i class="el-icon-goods"></i>
       </el-button>
-      <div class="total-price">￥{{ cart.totalPrice }}</div>
+      <div class="total-price">￥{{ cart.totalSalePrice}} ￥{{ cart.totalPrice }}</div>
       <el-button class="submitBtn" @click="submit">去下单</el-button>
     </footer>
     <div id="cover"></div>
@@ -91,7 +98,7 @@ export default {
     },
     // 获取数据
     findProducts: function () {
-      const loading = this.$loading();
+      var loading = this.$loading();
       var me = this;
       $.ajax({
         url: "/pf/product/c/list",
@@ -110,7 +117,6 @@ export default {
         type: "get",
         contentType: "application/json",
         success: function (data) {
-          console.log(data.data);
         }
       });
     },
@@ -121,18 +127,22 @@ export default {
         if (product.productId == this.selected[i].id) {
           isSelected = true;
           this.selected[i].count ++;
+          this.selected[i].countSalePrice = this.selected[i].salePrice * this.selected[i].count;
           this.selected[i].countPrice = this.selected[i].price * this.selected[i].count;
           break;
         }
       }
       if (!isSelected) {
         var count = 1;
+        var countSalePrice = product.salePrice * count;
         var countPrice = product.price * count;
         var s = {
           id: product.productId,
           name: product.productName,
           count: count,
+          salePrice: product.salePrice,
           price: product.price,
+          countSalePrice: countSalePrice,
           countPrice: countPrice
         }
         this.selected.push(s);
@@ -140,9 +150,11 @@ export default {
       this.cart.selected = this.selected;
       this.cart.totalCount = 0;
       this.cart.totalPrice = 0;
+      this.cart.totalSalePrice = 0;
       for (var i = 0; i < this.selected.length; i ++) {
         this.cart.totalCount += this.selected[i].count;
         this.cart.totalPrice += this.selected[i].countPrice;
+        this.cart.totalSalePrice += this.selected[i].countSalePrice;
       }
       this.$message({
         message: '添加成功！',
@@ -155,7 +167,9 @@ export default {
       if (selected.count > 0) {
         selected.count --;
         selected.countPrice = selected.price * selected.count;
+        selected.countSalePrice = selected.salePrice * selected.count;
         this.cart.totalCount --;
+        this.cart.totalSalePrice -= selected.salePrice;
         this.cart.totalPrice -= selected.price;
         // 最后一个删除就要把该行数据删除
         if (selected.count == 0) {
@@ -170,7 +184,9 @@ export default {
     addOne: function (selected) {
       selected.count ++;
       selected.countPrice = selected.price * selected.count;
+      selected.countSalePrice = selected.salePrice * selected.count;
       this.cart.totalCount ++;
+      this.cart.totalSalePrice += selected.salePrice;
       this.cart.totalPrice += selected.price;
       this.selected = this.cart.selected;
     },
@@ -298,7 +314,7 @@ export default {
     padding-left: 5px;
   }
   .cart-price {
-    width: 20%;
+    width: 30%;
     display: inline-block;
     height: 40px;
     line-height: 40px;
@@ -335,14 +351,14 @@ export default {
   .description {
     font-size: 13px;
     color: #999;
-    height: 60px;
+    height: 40px;
     display: inline-block;
     overflow: hidden;
     width: 120px;
   }
   .bottom {
     line-height: 20px;
-    height: 30px;
+    height: 40px;
     margin-top: 5px;
   }
   .button {
