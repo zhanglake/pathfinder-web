@@ -39,3 +39,19 @@ global.getzf = function (num) {
   }  
   return num;  
 }
+
+
+// 客户登录信息
+global.CURRENT_CUSTOMER = {
+  id: '',
+  name: '',
+  phone: '',
+  address: ''
+};
+
+
+// 管理员登录信息
+global.CURRENT_ADMIN = {
+  id: '',
+  name: ''
+}

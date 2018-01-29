@@ -22,16 +22,24 @@
 
 <script>
 import $ from 'jquery'
+import '../global/global.js'
 
 export default {
   data: function () {
     return {
+      CURRENT_ADMIN: global.CURRENT_ADMIN,
       active: true,
       headerFixed: true,
       menus: []
     }
   },
   created: function () {
+    if (!global.CURRENT_ADMIN.id) {
+      this.$router.push({
+        name: 'login',
+        params: {}
+      })
+    }
     this.getMenus(1);
   },
   methods: {

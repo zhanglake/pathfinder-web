@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import Login from '@/page/login.vue';
+
 import Back from '@/page/back.vue'
 import Front from '@/page/front.vue'
 
@@ -113,6 +115,10 @@ export default new Router({
           component: Create
         }
       ]
+    },{
+      path: '/login',
+      name: 'login',
+      component: Login,
     }
   ]
 })
