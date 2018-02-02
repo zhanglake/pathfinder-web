@@ -40,7 +40,6 @@ global.getzf = function (num) {
   return num;  
 }
 
-
 // 客户登录信息
 global.CURRENT_CUSTOMER = {
   id: '',
@@ -54,4 +53,15 @@ global.CURRENT_CUSTOMER = {
 global.CURRENT_ADMIN = {
   id: '',
   name: ''
+}
+
+// 状态转换
+global.CHANGE_STATUS = function (statusInt) {
+  switch (statusInt) {
+    case 0: return '已创建';
+    case 1: return '已付款';
+    case 2: return '已确认';
+    case 3: return '发货中';
+    case 4: return '已完成';
+  }
 }

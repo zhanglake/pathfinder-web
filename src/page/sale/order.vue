@@ -324,20 +324,20 @@ export default {
 <style>
 .status {
   display: inline-block !important;
-  width: 60px !important;
-  height: 30px !important;
+  width: 50px !important;
+  height: 25px !important;
   font-size: 12px !important;
   border-radius: 15px !important;
-  line-height: 30px !important;
+  line-height: 25px !important;
   text-align: center !important;
   color: #fff !important;
   margin-left: -10px !important;
 }
-.status-0 { background-color: #1ab394}
-.status-1 { background-color: #1ab394}
-.status-2 { background-color: #FB3301}
-.status-3 { background-color: #ff8400}
-.status-4 { background-color: #818385}
+.status-0 { background-color: #ef4836}
+.status-1 { background-color: #f39c12}
+.status-2 { background-color: #51b7a3}
+.status-3 { background-color: #399bff}
+.status-4 { background-color: #33577b}
 
 .status-dialog {
     display: inline-block !important;

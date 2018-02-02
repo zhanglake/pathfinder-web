@@ -67,8 +67,8 @@ main {
   display: -ms-flexbox;
   display: flex;
   min-height: 800px;
-  border: solid 40px #E9ECF1;
+  border: solid 10px #E9ECF1;
   background-color: #FCFCFC;
-  border-width: 20px 40px;
+  border-width: 10px 10px;
 }
 </style>

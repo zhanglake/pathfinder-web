@@ -73,7 +73,6 @@
 <script>
 import $ from 'jquery'
 import '../../global/global.js'
-import '../../global/global.js'
 export default {
   data: function () {
     return {
