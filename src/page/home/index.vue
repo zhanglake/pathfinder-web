@@ -304,6 +304,9 @@ export default {
   padding: 10px 5px;
   text-align: center;
   font-family: 'Open Sans', sans-serif;
+  border: solid 3px #E9ECF1;
+  border-width: 0 3px;
+  height: 103px;
 }
 .div-title {
   color: #37363e;

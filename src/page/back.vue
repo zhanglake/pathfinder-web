@@ -91,6 +91,6 @@ main {
   min-height: 800px;
   border: solid 20px #E9ECF1;
   background-color: #FCFCFC;
-  border-width: 10px 20px 0 20px;
+  border-width: 5px 10px 0 10px;
 }
 </style>
