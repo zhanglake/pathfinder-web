@@ -21,6 +21,7 @@
                   <el-option value="2" label="已确认"></el-option>
                   <el-option value="3" label="发货中"></el-option>
                   <el-option value="4" label="已完成"></el-option>
+                  <el-option value="5" label="已关闭"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -112,6 +113,7 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
+        <el-button v-show="order.statusInt < 2" type="success" @click="closeOrder(order.orderId)">关闭订单</el-button>
         <el-button v-show="order.statusInt < 2" type="success" @click="confirmOrder(order.orderId)">确认订单</el-button>
         <el-button v-show="order.statusInt == 2" type="success" @click="deliverOrder(order.orderId)">发 货</el-button>
         <el-button type="primary" @click="detailDialogVisble = false">关 闭</el-button>
@@ -219,6 +221,7 @@ export default {
         case 2: return '已确认';break;
         case 3: return '发货中';break;
         case 4: return '已完成';break;
+        case 5: return '已关闭';break;
       }
     },
     showOne: function (row, event, column) {
@@ -263,6 +266,31 @@ export default {
     },
     formatPrice: function (row, column, cellValue) {
       return '￥ ' + cellValue
+    },
+    closeOrder: function (orderId) {
+      var me = this;
+      if (orderId) {
+        this.$confirm('关闭此订单?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          $.ajax({
+            url: "/pf/order/changestatus/" + orderId + "/5",
+            type: "get",
+            contentType: "application/json",
+            success: function (data) {
+              me.$message({
+                showClose: true,
+                message: data.message,
+                type: data.status.toLowerCase()
+              });
+              me.findOrderTable();
+              me.showOneByOrderId(orderId);
+            }
+          });
+        }).catch(() => {});
+      }
     },
     confirmOrder: function (orderId) {
       var me = this;
@@ -338,6 +366,7 @@ export default {
 .status-2 { background-color: #51b7a3}
 .status-3 { background-color: #399bff}
 .status-4 { background-color: #33577b}
+.status-5 { background-color: #666666}
 
 .status-dialog {
     display: inline-block !important;

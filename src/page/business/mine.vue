@@ -210,6 +210,7 @@ export default {
                 case 2: me.orders[i].status = '已确认';break;
                 case 3: me.orders[i].status = '已发货';break;
                 case 4: me.orders[i].status = '已完成';break;
+                case 5: me.orders[i].status = '已关闭';break;
               }
             }
             loading.close();
@@ -265,6 +266,7 @@ export default {
 .status-2 { background-color: #FB3301}
 .status-3 { background-color: #ff8400}
 .status-4 { background-color: #818385}
+.status-5 { background-color: #666666}
 .money {
   font-size: 10px;
 }
