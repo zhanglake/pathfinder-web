@@ -113,7 +113,7 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-        <el-button v-show="order.statusInt < 2" type="success" @click="closeOrder(order.orderId)">关闭订单</el-button>
+        <el-button v-show="order.statusInt < 2" type="info" @click="closeOrder(order.orderId)">关闭订单</el-button>
         <el-button v-show="order.statusInt < 2" type="success" @click="confirmOrder(order.orderId)">确认订单</el-button>
         <el-button v-show="order.statusInt == 2" type="success" @click="deliverOrder(order.orderId)">发 货</el-button>
         <el-button type="primary" @click="detailDialogVisble = false">关 闭</el-button>
