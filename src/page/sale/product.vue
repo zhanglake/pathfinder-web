@@ -151,8 +151,8 @@ export default {
         {name: '5折', value: 0.5}
       ],
       productType: [
-        {name: '烘焙面包', value: 1}, {name: '新鲜蛋糕', value: 2}, {name: '手工泡芙', value: 3},
-        {name: '精制点心', value: 4}, {name: '手工定制', value: 5}
+        {name: '烘焙面包', value: 1}, {name: '精制蛋糕', value: 2}, {name: '法式甜品', value: 3},
+        {name: '豆豆饭团', value: 4}, {name: '手工定制', value: 5}
       ],
       newProduct: {
         productId: '',
